@@ -1,0 +1,82 @@
+.button {
+    -fx-border-radius: 5px;
+
+    -fx-font-family: "Courier New";
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-background-color: rgba(0, 0, 0, 0.73);
+    -fx-border-color: rgba(31, 31, 31, 0.85);
+    -fx-border-width: 2px;
+    -fx-background-radius:7px;
+    -fx-text-fill: white;
+}
+.custom-table .column-header {
+    -fx-background-color: black;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: gray;
+    -fx-text-fill: white;
+
+
+}
+.custom-table .column-header.cell{
+    -fx-text-fill: white;
+
+}
+.custom-table .table-view{
+    -fx-box-border:transparente;
+}
+.custom-table{
+    -fx-border-width: 1px;
+    -fx-border-color: gray;
+}
+.custom-table .column-header .label {
+
+    -fx-text-fill: white;
+
+}
+.custom-table .table-row-cell {
+    -fx-border-color: gray;
+    -fx-border-width: 0 0 2 0;
+    -fx-text-fill: white;
+
+}
+
+.custom-table .table-cell {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+
+    -fx-border-color: gray;
+    -fx-border-width: 0 2 2 0;
+}
+.label {
+    -fx-font-family: "Arial";
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+
+}
+
+#labelnone {
+    -fx-font-family: "Courier New";
+    -fx-text-fill: #939393;
+    -fx-font-size: 16;
+}
+#pauseLabel{
+
+    -fx-font-family: "Courier New";
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-border-color: white;
+    -fx-border-width: 0 0 2 0;
+    -fx-text-fill: white;
+
+}
+#info{
+    -fx-background-color: #0e0e0e;
+    -fx-border-width: 2 0 0 0;
+    -fx-border-color: #262626;
+}
+#resultlabel {
+    -fx-font-family: "Courier New";
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+}
