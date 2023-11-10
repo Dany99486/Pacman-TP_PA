@@ -28,11 +28,7 @@ public class GameBWUI{
 
 
     private void begin() {
-
         fsm.start();
-    }
-    public void menu(){
-        startMenu();
     }
 
     private void hauntMode() {
@@ -73,13 +69,10 @@ public class GameBWUI{
 
     public void start() {
         if (fsm.getState() == null) System.exit(-1);
-        //while (keyInput()==null){
-        //    ;
-        //}
         while (true){
             switch (fsm.getState()) {
                 case BEGIN -> begin();
-                //case START_MENU -> startMenu();
+                case START_MENU -> startMenu();
                 case HAUNT_MODE -> hauntMode();
                 case WAIT_EVENT -> waitEvent();
                 case GAMEOVER -> gameOver();
@@ -90,19 +83,14 @@ public class GameBWUI{
 
     }
 
-    public void startMenu() {
-        do {
-            showMenu();
-        }while (keyInput()!=KeyType.Enter);
-
-        start();
+    private void startMenu() {
+        showMenu();
+        fsm.setkeyInput(keyInput());
     }
 
     private void showMenu() {
-
         try {
             Terminal terminal = screen.getTerminal();
-
             TextGraphics tg = terminal.newTextGraphics();
 
             tg.setForegroundColor(TextColor.ANSI.BLACK);
@@ -110,10 +98,7 @@ public class GameBWUI{
             tg.putString(4, 14, "                    ");
             tg.putString(4, 15, " ENTER para começar ");
             tg.putString(4, 16, "                    ");
-
             screen.refresh();
-            //System.out.println("wfefw");
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

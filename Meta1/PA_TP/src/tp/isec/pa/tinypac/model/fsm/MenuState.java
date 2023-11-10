@@ -3,7 +3,7 @@ package tp.isec.pa.tinypac.model.fsm;
 import com.googlecode.lanterna.input.KeyType;
 import tp.isec.pa.tinypac.model.data.GameBWData;
 
-/*public class MenuState extends GameBWStateAdapter {
+public class MenuState extends GameBWStateAdapter {
     public MenuState(GameBWContext context, GameBWData data) {
         super(context, data);
     }
@@ -19,4 +19,3 @@ import tp.isec.pa.tinypac.model.data.GameBWData;
         return GameBWState.START_MENU;
     }
 }
-*/

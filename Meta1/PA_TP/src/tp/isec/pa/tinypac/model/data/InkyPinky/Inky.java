@@ -11,7 +11,7 @@ public class Inky extends Pinky {
     }
 
     @Override
-    public char getSymbol() {
+    public char getType() {
         return type;
     }
 

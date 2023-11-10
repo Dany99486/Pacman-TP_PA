@@ -2,7 +2,6 @@ package tp.isec.pa.tinypac.model.data.BlinkyClyde;
 
 import tp.isec.pa.tinypac.model.data.GameBWData;
 
-import tp.isec.pa.tinypac.model.data.MazeElement;
 import tp.isec.pa.tinypac.model.fsm.Direction;
 
 public class Clyde extends Blinky {
@@ -13,7 +12,7 @@ public class Clyde extends Blinky {
     }
 
     @Override
-    public char getSymbol() {
+    public char getType() {
         return type;
     }
 
@@ -21,7 +20,6 @@ public class Clyde extends Blinky {
     public void move(GameBWData game) {
         if (!onSite(game))
             super.move(game);
-
     }
 
 
@@ -30,21 +28,14 @@ public class Clyde extends Blinky {
         int x = getX();
         int y = getY();
 
-
-
         // verifica a linha
         for (int j = 0; j < board[y].length; j++) {
             if (board[y][j] == 'c' && j != x) {
                 // verifica se há 'x' entre a posição atual e a posição do 'c' na mesma linha
                 if (isBlocked(x, j, y, y, board)) {
-
                     return false;
                 }
-                if (getOverItem()!='-'){
-                    MazeElement a=new MazeElement();
-                    a.setElemento(getOverItem());
-                    game.getTrueBoard().set(getY(),getX(),a);
-                }
+
                 // se não há 'x', mova o personagem
                 if (j > x) {
                     increaseX();
@@ -65,11 +56,7 @@ public class Clyde extends Blinky {
                 if (isBlocked(x, x, y, i, board)) {
                     return false;
                 }
-                if (getOverItem()!='-'){
-                    MazeElement a=new MazeElement();
-                    a.setElemento(getOverItem());
-                    game.getTrueBoard().set(getY(),getX(),a);
-                }
+
                 // se não há 'x', mova o personagem
                 if (i > y) {
                     increaseY();

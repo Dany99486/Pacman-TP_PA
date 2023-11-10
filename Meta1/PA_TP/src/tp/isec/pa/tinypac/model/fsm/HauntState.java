@@ -20,9 +20,9 @@ public class HauntState extends GameBWStateAdapter {
         timer.schedule(tarefa, data.getTimer());
     }
     @Override
-    public void action(long timePassed){
-        data.putsToMaze();
-        data.hauntMode(timePassed);
+    public void action(){
+
+        data.hauntMode();
         if (data.getLifes()<=0)
             changeState(GameBWState.GAMEOVER);
         else if (data.endOFLevel()&&data.getVenceu())

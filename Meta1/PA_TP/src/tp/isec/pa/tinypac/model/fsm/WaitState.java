@@ -15,9 +15,8 @@ public class WaitState extends GameBWStateAdapter {
         return GameBWState.WAIT_EVENT;
     }
     @Override
-    public void action(long timePassed){
-        data.putsToMaze();
-        data.action(timePassed);
+    public void action(){
+        data.action();
         if (data.getLifes()<=0)
             changeState(GameBWState.GAMEOVER);
         else if (data.endOFLevel()&&data.getVenceu())

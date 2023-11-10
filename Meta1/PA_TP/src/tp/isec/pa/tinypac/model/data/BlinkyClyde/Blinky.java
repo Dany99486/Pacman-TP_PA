@@ -2,7 +2,6 @@ package tp.isec.pa.tinypac.model.data.BlinkyClyde;
 
 import tp.isec.pa.tinypac.model.data.GameBWData;
 import tp.isec.pa.tinypac.model.data.IGhost;
-import tp.isec.pa.tinypac.model.data.MazeElement;
 import tp.isec.pa.tinypac.model.fsm.Direction;
 
 import java.util.ArrayList;
@@ -15,44 +14,6 @@ public class Blinky implements IGhost {
     Direction direction;
     private ArrayList<Direction>directionsHistory;
     private boolean isVulnerable;
-    private char overItem='y';
-
-    @Override
-    public void setOverItem(char overItem) {
-        this.overItem = overItem;
-    }
-    @Override
-    public void setOverItemBehind(char overItem,GameBWData data) {
-        MazeElement a = new MazeElement();
-        a.setElemento(overItem);
-
-        switch (direction){
-            case DOWN -> {
-                if (!(data.getTrueBoard().get(y-1,x).getSymbol()=='x'||data.getTrueBoard().get(y-1,x).getSymbol()=='Y'||data.getTrueBoard().get(y-1,x).getSymbol()=='y'))
-                    data.getTrueBoard().set(y-1,x, a);
-            }
-            case RIGHT -> {
-                if (!(data.getTrueBoard().get(y,x-1).getSymbol()=='x'||data.getTrueBoard().get(y,x-1).getSymbol()=='Y'||data.getTrueBoard().get(y,x-1).getSymbol()=='y'))
-                    data.getTrueBoard().set(y,x-1, a);
-            }
-            case UP -> {
-                if (!(data.getTrueBoard().get(y+1,x).getSymbol()=='x'||data.getTrueBoard().get(y+1,x).getSymbol()=='Y'||data.getTrueBoard().get(y+1,x).getSymbol()=='y'))
-                    data.getTrueBoard().set(y+1,x, a);
-            }
-            case LEFT -> {
-                if (!(data.getTrueBoard().get(y,x+1).getSymbol()=='x'||data.getTrueBoard().get(y,x+1).getSymbol()=='Y'||data.getTrueBoard().get(y,x+1).getSymbol()=='y'))
-                    data.getTrueBoard().set(y,x+1, a);
-            }
-        }
-
-        this.overItem = overItem;
-
-
-    }
-    @Override
-    public char getOverItem() {
-        return overItem;
-    }
 
     public Blinky(int x, int y) {
         directionsHistory=new ArrayList<>();
@@ -94,33 +55,18 @@ public class Blinky implements IGhost {
                     if (game.getCoord(i,j)=='Y')getYlocation= new int[]{i, j};
                 }
             }
-            setOverItem(game.getTrueBoard().get(y,x).getSymbol());
             if (x<getYlocation[0]) x++;
             else if (x>getYlocation[0])x--;
             else if (y>=getYlocation[1])y--;
             direction=Direction.UP;
             directionsHistory.clear();
-            if (overItem=='Y'||overItem=='P'||overItem=='I'||overItem=='B'||overItem=='C') overItem='o';
             return;
 
         }
 
-        //ver se bem ==========================================
-        /*
-        if (overItem!='-'){
-            MazeElement a=new MazeElement();
-            a.setElemento(overItem);
-            game.getTrueBoard().set(y,x,a);
-        }*/
-
 
         // Se a próxima célula não for uma parede, continue na mesma direção
-        if (nextCell != 'x'&&nextCell!='Y') {/*
-            if (nextCell=='P'||nextCell=='B'||nextCell=='I'||nextCell=='C')
-                overItem='-';
-            else                                    //overItem muda muito cedo
-                overItem=nextCell;*/
-            //System.out.println(overItem);
+        if (nextCell != 'x') {
             switch (direction) {
                 case UP -> y--;
                 case LEFT -> x--;
@@ -179,12 +125,6 @@ public class Blinky implements IGhost {
     @Override
     public void invertMoves() {
         Collections.reverse(directionsHistory);
-        if (directionsHistory.size()<4) return;
-        directionsHistory.remove(directionsHistory.size()-1);
-        directionsHistory.remove(directionsHistory.size()-1);
-        directionsHistory.remove(directionsHistory.size()-1);
-        directionsHistory.remove(directionsHistory.size()-1);
-
     }
 
     @Override
@@ -232,27 +172,7 @@ public class Blinky implements IGhost {
     }
 
     @Override
-    public char backCell(GameBWData game) {
-        char c;
-
-        switch (direction){
-            case DOWN -> c = game.getCoord(x,y-1);
-            case RIGHT -> c = game.getCoord(x-1,y);
-            case UP -> c = game.getCoord(x,y+1);
-            case LEFT -> c = game.getCoord(x+1,y);
-            default -> c = 't';
-        }
-
-        return c;
-    }
-
-
-    public Direction getDirection() {
-        return direction;
-    }
-
-    @Override
-    public char getSymbol() {
+    public char getType() {
         return type;
     }
 

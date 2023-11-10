@@ -5,7 +5,7 @@ import com.googlecode.lanterna.input.KeyType;
 
 
 
-public class Pacman implements IMazeElement{
+public class Pacman {
     static final private char type='c';
     private int x,y;
 
@@ -19,16 +19,11 @@ public class Pacman implements IMazeElement{
     public int getY() {return y;}
 
     public void move(KeyType keyType,GameBWData game){
-
-        MazeElement a=new MazeElement();
-        a.setElemento(' ');
-        game.getTrueBoard().set(y,x,a);
-        MazeElement a1=new MazeElement();
-        a1.setElemento('W');
-        game.getTrueBoard().set(game.getWarps()[0][0],game.getWarps()[0][1],a1);
-        MazeElement a2=new MazeElement();
-        a2.setElemento('W');
-        game.getTrueBoard().set(game.getWarps()[1][0],game.getWarps()[1][1],a2);
+        if (game.getCoord(x,y)=='o'){
+            game.setCoord(x,y,' ');
+            game.addPoints(1);
+            game.addEatenFruit();
+        }
         switch (keyType){
             case ArrowRight -> {
                 if (game.getCoord(x+1,y)=='o'||game.getCoord(x+1,y)=='O'||game.getCoord(x+1,y)=='F'||game.getCoord(x+1,y)=='M'||game.getCoord(x+1,y)=='W'||game.getCoord(x+1,y)==' '||game.getCoord(x+1,y)=='T') {
@@ -53,17 +48,12 @@ public class Pacman implements IMazeElement{
 
 
         }
-        if (game.getCoord(x,y)=='o'){
-            game.setCoord(x,y,' ');
-            game.addPoints(1);
-            game.addEatenFruit();
-        }
 
     }
 
 
 
-    public char getSymbol() {
+    public char getType() {
         return type;
     }
 

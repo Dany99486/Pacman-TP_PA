@@ -6,15 +6,12 @@ public final class Maze {
         board = new IMazeElement[height][width];
     }
     public boolean set(int y, int x,IMazeElement element) {
-        if (element==null)
-            System.out.println("");
         if (y < 0 || y >= board.length || x < 0 || x >= board[0].length)
             return false;
         board[y][x] = element; // can be null
         return true;
     }
     public IMazeElement get(int y, int x) {
-
         if (y < 0 || y >= board.length || x < 0 || x >= board[0].length)
             return null;
         return board[y][x]; // can be null

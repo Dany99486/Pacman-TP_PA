@@ -26,8 +26,6 @@ public class GameBWData {
     private int coinsGot;
     private int[] fSpot;
     private int[][]warps;
-    private int[]spawn;
-    private int[]entrance;
     private int lastLevelMap;
     private int level;
     private int lifes;
@@ -35,7 +33,6 @@ public class GameBWData {
     private int velocidade;// [0,99] a zero anda o mesmo que o pacman ; a 50 andam o dobro
     private int timer;
     private boolean hauntFlag;
-    private long inicioJogo;
 
 
 
@@ -47,14 +44,13 @@ public class GameBWData {
         points=0;
         tic=0;
         velocidade=1;
-        //direction= KeyType.ArrowRight;
+        direction= KeyType.ArrowRight;
     }
 
     public int getTimer() {return timer;}
     public void normalMode() {
         hauntFlag=false;
     }
-
 
     public void initGame() {
 
@@ -66,8 +62,6 @@ public class GameBWData {
         //quando morrer falta reiniciar o nivel
         board=new Maze(boarderHeight,boarderWidth);
         loadMazeFromFile(countMaps());
-        spawn=getInitialSpawn();
-        entrance=getInitialEntrance();
 
         ghosts=new ArrayList<>();
         ghosts.add(new Blinky(15,15));
@@ -82,10 +76,7 @@ public class GameBWData {
 
     public int getBoarderHeight() {return boarderHeight;}
 
-    public int[] getSpawn(){
-        return spawn;
-    }
-    public int[] getInitialSpawn() {
+    public int[] getSpawn() {
         char[][] maze = board.getMaze();
         int[] coord=null;
 
@@ -97,22 +88,6 @@ public class GameBWData {
         }
         return coord;
     }
-    public int[] getEntrance(){
-        return entrance;
-    }
-    public int[] getInitialEntrance() {
-        char[][] maze = board.getMaze();
-        int[] coord=null;
-
-        for (int i = 0; i < maze.length; i++) {
-            for (int j = 0; j < maze[i].length; j++) {
-                if (maze[i][j] == 'Y') coord = new int[]{i, j};
-            }
-
-        }
-        return coord;
-    }
-
     public void setfSpot() {
         char[][] maze = board.getMaze();
         int[] coord=null;
@@ -156,7 +131,6 @@ public class GameBWData {
                         element = new MazeElement();
                         element.setElemento(c);
                     }
-
                     board.set(y, x, element);
                 }
                 y++;
@@ -234,7 +208,12 @@ public class GameBWData {
     public int getPoints() {return points;}
     public void addPoints(int n){points+=n;}
     public char[][] getBoard() {
-        return board.getMaze();
+        char[][] game=board.getMaze();
+        for (IGhost it:ghosts) {
+            game[it.getY()][it.getX()]=it.getType();
+        }
+        game[pacman.getY()][pacman.getX()]= pacman.getType();
+        return game;
     }
 
     public char getCoord(int x,int y){
@@ -245,22 +224,13 @@ public class GameBWData {
         a.setElemento(c);
         board.set(y,x,a);
     }
-    public int[][] getWarps(){
-        return warps;
-    }
     public void warp(){
-
         if (pacman.getX()==warps[0][1]&&pacman.getY()==warps[0][0]){
             pacman.setX(warps[1][1]);
             pacman.setY(warps[1][0]);
-
-
         }else if (pacman.getX()==warps[1][1]&&pacman.getY()==warps[1][0]){
             pacman.setX(warps[0][1]);
             pacman.setY(warps[0][0]);
-
-
-
         }
     }
     public void frutaF(){
@@ -294,126 +264,48 @@ public class GameBWData {
             hauntFlag=true;
         }
     }
-    public Maze getTrueBoard(){return board;}
+    public void action() {
 
-    public IGhost getGhostBehind(IGhost ghost){
         for (IGhost it:ghosts){
-            switch (ghost.getDirection()){
-                case DOWN ->{
-                    if (it.getX()==ghost.getX()&&it.getY()==ghost.getY()-1) return it;
-                }
-                case RIGHT -> {
-                    if (it.getX()==ghost.getX()-1&&it.getY()==ghost.getY()) return it;
-                }
-                case UP -> {
-                    if (it.getX()==ghost.getX()&&it.getY()==ghost.getY()+1) return it;
-                }
-                case LEFT -> {
-                    if (it.getX()==ghost.getX()+1&&it.getY()==ghost.getY()) return it;
-                }
-                default -> {return null;}
-            }
-        }
-        return null;
-    }
-    public void action(long timePassed) {
-        MazeElement c=new MazeElement();
-        c.setElemento('Y');
-        if (!(board.get(getEntrance()[0],getEntrance()[1]).getSymbol()=='B'
-                ||board.get(getEntrance()[0],getEntrance()[1]).getSymbol()=='C'
-                ||board.get(getEntrance()[0],getEntrance()[1]).getSymbol()=='I'
-                ||board.get(getEntrance()[0],getEntrance()[1]).getSymbol()=='P'))
-            board.set(getEntrance()[0],getEntrance()[1],c);
-        if (direction==null) {
-
-            inicioJogo= timePassed;
-            return;
-        }
-        if (timePassed-inicioJogo>5) {
-
-            for (IGhost it : ghosts) {
-                if (it instanceof Blinky) {
-
-                    if (tic % (100 - velocidade) == 0) {
-                        if (it.getOverItem() != '-') {
-                            MazeElement a = new MazeElement();
-                            a.setElemento(it.getOverItem());
-                            //System.out.println(it.getOverItem());
-                            if (!(it.nextCell(this) == 'B' || it.nextCell(this) == 'C' || it.nextCell(this) == 'I' || it.nextCell(this) == 'P'))
-                                board.set(it.getY(), it.getX(), a);
-                        }
-                        it.move(this);
-                        //System.out.println(it.nextCell(this));
-
-                        if (getGhostBehind(it) != null) {
-                            getGhostBehind(it).setOverItemBehind(it.getOverItem(), this);
-                            System.out.println("few");
-                        }
-                        it.setOverItem(board.get(it.getY(), it.getX()).getSymbol());
-
-                    }
-                } else if (it instanceof Pinky) {
-                    if (tic % (100 - velocidade) == 0) {
-
-                        it.move(this);
-
-                    }
-                }
-
-                if (it.getX() == pacman.getX() && it.getY() == pacman.getY()) {
-                    pacmanDie();
-                    inicioJogo = timePassed;
-                }
-            }
+            if (tic%(100-velocidade)==0)
+                it.move(this);
+            if (it.getX()== pacman.getX()&&it.getY()== pacman.getY())
+                pacmanDie();
         }
         if (tic%100==0){
             pacman.move(direction,this);
-            if (timePassed-inicioJogo>5)
-                for (IGhost it:ghosts){
-
-                    if (it.getX()== pacman.getX()&&it.getY()== pacman.getY()){
-                        pacmanDie();
-                        inicioJogo=timePassed;
-                    }
-                }
+            for (IGhost it:ghosts){
+                if (it.getX()== pacman.getX()&&it.getY()== pacman.getY())
+                    pacmanDie();
+            }
             frutaF();
             warp();
             powerUP();
-            //colocar tudo no maze:
-
 
         }
         tic++;
     }
-    public void putsToMaze(){
-        for (IGhost it:ghosts){
-            board.set(it.getY(),it.getX(),it);
-        }
-        board.set(pacman.getY(),pacman.getX(),pacman);
-
-
-    }
     public boolean isBlinkyVulnerable(){
         for (IGhost it:ghosts)
-            if (it.getSymbol()=='B')
+            if (it.getType()=='B')
                 return it.isVulnerable();
         return false;
     }
     public boolean isPinkyVulnerable(){
         for (IGhost it:ghosts)
-            if (it.getSymbol()=='P')
+            if (it.getType()=='P')
                 return it.isVulnerable();
         return false;
     }
     public boolean isInkyVulnerable(){
         for (IGhost it:ghosts)
-            if (it.getSymbol()=='I')
+            if (it.getType()=='I')
                 return it.isVulnerable();
         return false;
     }
     public boolean isClydeVulnerable(){
         for (IGhost it:ghosts)
-            if (it.getSymbol()=='C')
+            if (it.getType()=='C')
                 return it.isVulnerable();
         return false;
     }
@@ -423,26 +315,13 @@ public class GameBWData {
             it.setVulnerable();
         }
     }
-    public void hauntMode(long timePassed){
+    public void hauntMode(){
         hauntFlag=true;
         int countGhosts=0;
         IGhost a=null;
         for (IGhost it:ghosts){
-            if (tic%(100-velocidade)==0){
-                if (it.getOverItem()!='-') {
-                    MazeElement b = new MazeElement();
-                    b.setElemento(it.getOverItem());
-                    //System.out.println(it.getOverItem());
-                    if (!(it.nextCell(this)=='B'||it.nextCell(this)=='C'||it.nextCell(this)=='I'||it.nextCell(this)=='P'))
-                        board.set(it.getY(), it.getX(), b);
-                }
+            if (tic%(100-velocidade)==0)
                 it.reverseMove(this);
-                if (getGhostBehind(it)!=null) {
-                    getGhostBehind(it).setOverItemBehind(it.getOverItem(),this);
-
-                }
-                    it.setOverItem(board.get(it.getY(),it.getX()).getSymbol());
-            }
             ++countGhosts;
             if (it.getX()== pacman.getX()&&it.getY()== pacman.getY()){
                 if (it.isVulnerable()){

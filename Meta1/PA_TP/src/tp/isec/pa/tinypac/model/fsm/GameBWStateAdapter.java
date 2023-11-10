@@ -21,7 +21,7 @@ abstract public class GameBWStateAdapter implements IGameBWState {//gameengine t
 
 
     @Override
-    public void action(long timePassed){}
+    public void action(){}
 
     @Override
     public void setKey(KeyType key) {}
